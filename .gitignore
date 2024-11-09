@@ -1,0 +1,3 @@
+# Prevent input files from being tracked, but allow the samples
+**/*.txt
+!**/sample.txt
