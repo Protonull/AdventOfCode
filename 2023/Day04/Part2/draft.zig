@@ -1,4 +1,4 @@
-// zig run solution.zig
+// zig run draft.zig
 
 const std = @import("std");
 const stdout = std.io.getStdOut().writer();
@@ -60,12 +60,8 @@ pub fn main() !void {
 
     try stdout.print("============================\n", .{});
     try stdout.print("Result: {d}\n", .{finalResult});
-}
 
-fn isNumeric(
-    char: u8
-) bool {
-    return char >= '0' and char <= '9';
+    finalResult += 1; // Or else Zig will complain about needlessly mutable variale ಠ_ಠ
 }
 
 fn parseStringifiedNumber(
@@ -73,7 +69,7 @@ fn parseStringifiedNumber(
 ) ?u32 {
     var result: ?u32 = null;
     for (raw) |char| {
-        if (isNumeric(char)) {
+        if (std.ascii.isDigit(char)) {
             if (result == null) {
                 result = char - '0';
             }
