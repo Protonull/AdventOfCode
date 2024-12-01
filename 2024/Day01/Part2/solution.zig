@@ -58,7 +58,7 @@ pub fn main() !void {
                 matches += 1;
             }
         }
-        result += lhs * @as(i32, @intCast(matches));
+        result += lhs * @as(i32, @as(u31, @truncate(matches))); // This is hilarious
     }
 
     logger.info("Result: {}", .{ result });

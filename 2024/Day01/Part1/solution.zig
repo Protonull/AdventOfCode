@@ -55,7 +55,7 @@ pub fn main() !void {
     var result: i32 = 0;
 
     for (0..pairs.count) |i| {
-        result += @intCast(@abs(pairs.lhs.items[i] - pairs.rhs.items[i]));
+        result += @as(i32, @as(u31, @truncate(@abs(pairs.lhs.items[i] - pairs.rhs.items[i])))); // This is hilarious
     }
 
     logger.info("Result: {}", .{ result });
