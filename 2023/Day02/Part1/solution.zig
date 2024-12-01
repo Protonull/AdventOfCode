@@ -17,7 +17,7 @@ const Retrieved = struct {
 };
 
 pub fn main() !void {
-    const contents = @embedFile("input.txt");
+    const contents = @embedFile("sample.txt");
     var finalResult: u16 = 0;
 
     var iterator = std.mem.splitSequence(u8, contents, "\n");

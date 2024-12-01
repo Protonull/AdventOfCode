@@ -15,7 +15,7 @@ pub fn main() !void {
     defer arena.deinit();
     const allocator = arena.allocator();
 
-    const contents = @embedFile("input.txt");
+    const contents = @embedFile("sample.txt");
     var finalResult: u32 = 0;
 
     var partNumbers = std.ArrayList(PartNumber).init(allocator);

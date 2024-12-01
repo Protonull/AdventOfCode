@@ -2,7 +2,7 @@
 
 const std = @import("std");
 const stdout = std.io.getStdOut().writer();
-const input = @embedFile("input.txt");
+const input = @embedFile("sample.txt");
 
 pub fn main() !void {
     var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);

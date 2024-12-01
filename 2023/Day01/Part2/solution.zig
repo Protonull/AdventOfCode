@@ -25,7 +25,7 @@ const VALID_NUMBERS = std.ComptimeStringMap(u8, .{
 });
 
 pub fn main() !void {
-    const contents = @embedFile("input.txt");
+    const contents = @embedFile("sample.txt");
 
     var finalResult: u16 = 0;
 

@@ -4,7 +4,7 @@ const std = @import("std");
 const stdout = std.io.getStdOut().writer();
 
 pub fn main() !void {
-    const contents = @embedFile("input.txt");
+    const contents = @embedFile("sample.txt");
 
     var finalResult: u16 = 0;
 
