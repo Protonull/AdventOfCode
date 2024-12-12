@@ -17,16 +17,22 @@ extension GridParsing on String {
 
 extension GridUtils on Grid {
     Grid<R> transformSlots<T, R>(
-        R Function(T) transformer
+        R transformer(T)
     ) {
+        final grid = this as Grid<T>;
         return UnmodifiableListView(
-            List.of(this as Grid<T>, growable: false).map((row) => row.map(transformer).toList(growable: false))
+            List.generate(this.length, (y) {
+                final old_row = grid[y];
+                return List.generate(old_row.length, (x) {
+                    final old_slot = old_row[x];
+                    return transformer(old_slot);
+                }, growable: false);
+            }, growable: false)
         );
     }
 
-    Iterable<(Pos, T, void Function(T))> iterateSlots<T>(
-        Grid<T> grid
-    ) sync* {
+    Iterable<(Pos, T, void Function(T))> iterateSlots<T>() sync* {
+        final grid = this as Grid<T>;
         for (int y = 0; y < grid.length; y++) {
             final row = grid[y];
             for (int x = 0; x < row.length; x++) {
