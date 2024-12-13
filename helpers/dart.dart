@@ -15,26 +15,33 @@ extension GridParsing on String {
     }
 }
 
-extension GridUtils on Grid {
-    Grid<R> transformSlots<T, R>(
+extension GridHelpers<T> on Grid<T> {
+    Grid<R> transformSlots<R>(
         R transformer(T)
     ) {
-        final grid = this as Grid<T>;
         return UnmodifiableListView(
-            List.generate(this.length, (y) {
-                final old_row = grid[y];
-                return List.generate(old_row.length, (x) {
-                    final old_slot = old_row[x];
-                    return transformer(old_slot);
-                }, growable: false);
-            }, growable: false)
+            List.generate(
+                this.length,
+                (y) {
+                    final row = this[y];
+                    return List.generate(
+                        row.length,
+                        (x) => transformer(row[x]),
+                        growable: false
+                    );
+                },
+                growable: false
+            )
         );
     }
 
-    Iterable<(Pos, T, void Function(T))> iterateSlots<T>() sync* {
-        final grid = this as Grid<T>;
-        for (int y = 0; y < grid.length; y++) {
-            final row = grid[y];
+    Grid<T> clone() {
+        return transformSlots((slot) => slot);
+    }
+
+    Iterable<(Pos, T, void Function(T))> iterateSlots() sync* {
+        for (int y = 0; y < this.length; y++) {
+            final row = this[y];
             for (int x = 0; x < row.length; x++) {
                 yield (
                     (x, y),
@@ -44,28 +51,43 @@ extension GridUtils on Grid {
             }
         }
     }
+    
+    T? getSlot(
+        Pos slot
+    ) {
+        final (x, y) = slot;
+        if (x < 0 || y < 0 || y >= this.length) {
+            return null;
+        }
+        final row = this[y];
+        if (x >= row.length) {
+            return null;
+        }
+        return row[x];
+    }
+    
+    void setSlot(
+        Pos slot,
+        T value
+    ) {
+        final (x, y) = slot;
+        this[y][x] = value;
+    }
 }
 
+@deprecated
 T? getGridSlot<T>(
     Grid<T> grid,
     Pos slot
 ) {
-    final (x, y) = slot;
-    if (x < 0 || y < 0 || y >= grid.length) {
-        return null;
-    }
-    final row = grid[y];
-    if (x >= row.length) {
-        return null;
-    }
-    return row[x];
+    return grid.getSlot(slot);
 }
 
+@deprecated
 void setGridSlot<T>(
     Grid<T> grid,
     Pos slot,
     T value
 ) {
-    final (x, y) = slot;
-    grid[y][x] = value;
+    grid.setSlot(slot, value);
 }
