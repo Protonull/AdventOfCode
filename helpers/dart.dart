@@ -91,3 +91,19 @@ void setGridSlot<T>(
 ) {
     grid.setSlot(slot, value);
 }
+
+int wrappedModulus(
+    int value,
+    int max
+) {
+    if (max < 0) {
+       throw "Negative maxes not allowed (for now)";
+    }
+    if (value >= 0) {
+        return value % max;
+    }
+    while (value < 0) {
+        value += max;
+    }
+    return value;
+}
