@@ -16,21 +16,11 @@ extension GridParsing on String {
 
 extension GridHelpers<T> on Grid<T> {
     Grid<R> transformSlots<R>(
-        R transformer(T)
+        R transformer(T slot)
     ) {
         return UnmodifiableListView(
-            List.generate(
-                this.length,
-                (y) {
-                    final row = this[y];
-                    return List.generate(
-                        row.length,
-                        (x) => transformer(row[x]),
-                        growable: false
-                    );
-                },
-                growable: false
-            )
+            this.map((row) => row.map(transformer).toList(growable: false))
+                .toList(growable: false)
         );
     }
 
@@ -38,7 +28,7 @@ extension GridHelpers<T> on Grid<T> {
         return transformSlots((slot) => slot);
     }
 
-    Iterable<(Pos, T, void Function(T))> iterateSlots() sync* {
+    Iterable<(Pos, T, void Function(T value))> iterateSlots() sync* {
         for (int y = 0; y < this.length; y++) {
             final row = this[y];
             for (int x = 0; x < row.length; x++) {
@@ -138,6 +128,12 @@ extension PosHelpers on Pos {
             thisX * by,
             thisY * by
         );
+    }
+}
+
+extension ListHelpers<T> on List<T> {
+    UnmodifiableListView<T> asUnmodifiableListView() {
+        return UnmodifiableListView(this);
     }
 }
 
