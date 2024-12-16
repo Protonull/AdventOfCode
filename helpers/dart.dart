@@ -1,7 +1,6 @@
 import "dart:collection";
 
 typedef Grid<T> = UnmodifiableListView<List<T>>;
-typedef Pos = (int, int);
 
 extension GridParsing on String {
     Grid<String> asGrid(
@@ -73,6 +72,21 @@ extension GridHelpers<T> on Grid<T> {
         final (x, y) = slot;
         this[y][x] = value;
     }
+    
+    Pos? findFirst(
+        bool tester(T slot)
+    ) {
+        for (int y = 0; y < this.length; y++) {
+            final row = this[y];
+            for (int x = 0; x < row.length; x++) {
+                final cell = row[x];
+                if (tester(cell)) {
+                    return (x, y);
+                }
+            }
+        }
+        return null;
+    }
 }
 
 @deprecated
@@ -90,6 +104,41 @@ void setGridSlot<T>(
     T value
 ) {
     grid.setSlot(slot, value);
+}
+
+typedef Pos = (int, int);
+extension PosHelpers on Pos {
+    Pos add(
+        Pos other
+    ) {
+        final (thisX, thisY) = this;
+        final (otherX, otherY) = other;
+        return (
+            thisX + otherX,
+            thisY + otherY
+        );
+    }
+
+    Pos subtract(
+        Pos other
+    ) {
+        final (thisX, thisY) = this;
+        final (otherX, otherY) = other;
+        return (
+            thisX - otherX,
+            thisY - otherY
+        );
+    }
+
+    Pos multiply(
+        int by
+    ) {
+        final (thisX, thisY) = this;
+        return (
+            thisX * by,
+            thisY * by
+        );
+    }
 }
 
 int wrappedModulus(
